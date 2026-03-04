@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalesRunner 1st Run Tournament — กฎการแข่งขัน</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;900&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700;
+    --gold2: #FFA500;
+    --red: #E8003D;
+    --dark: #0A0A12;
+    --card: #12121E;
+    --card2: #1A1A2E;
+    --border: #2A2A45;
+    --text: #E8E8F5;
+    --muted: #8888AA;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ====== HEADER ====== */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .season-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--red), #8B0020);
+    color: #fff;
+    font-family: 'Kanit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 5px 18px;
+    border-radius: 2px;
+    margin-bottom: 18px;
+  }
+
+  .game-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .main-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(32px, 6vw, 54px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+  }
+
+  .subtitle {
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .header-line {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    margin: 20px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ====== SECTION ====== */
+  .section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .section:nth-child(2) { animation-delay: 0.05s; }
+  .section:nth-child(3) { animation-delay: 0.10s; }
+  .section:nth-child(4) { animation-delay: 0.15s; }
+  .section:nth-child(5) { animation-delay: 0.20s; }
+  .section:nth-child(6) { animation-delay: 0.25s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 24px;
+    background: var(--card2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    font-size: 22px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .section-num {
+    font-family: 'Kanit', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  .section-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+
+  .section-body {
+    padding: 22px 24px;
+  }
+
+  /* ====== STAT GRID ====== */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .stat-box {
+    background: #0F0F1C;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Kanit', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ====== BRACKET ====== */
+  .bracket {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .bracket-step {
+    background: #0F0F1C;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bracket-step.highlight {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .bracket-arrow {
+    color: var(--border);
+    font-size: 12px;
+  }
+
+  /* ====== RULES LIST ====== */
+  .rule-list {
+    list-style: none;
+  }
+
+  .rule-list li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(42,42,69,0.5);
+    font-size: 15px;
+  }
+
+  .rule-list li:last-child { border-bottom: none; }
+
+  .rule-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ====== SCORE TABLE ====== */
+  .score-table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .score-cell {
+    background: #0F0F1C;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+  }
+
+  .score-cell.top3 {
+    border-color: var(--gold);
+    background: rgba(255,215,0,0.06);
+  }
+
+  .score-rank {
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .score-pt {
+    font-family: 'Kanit', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+  }
+
+  .score-label {
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* ====== WARNING TAGS ====== */
+  .tag-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(232,0,61,0.1);
+    border: 1px solid rgba(232,0,61,0.3);
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FF6B8A;
+  }
+
+  /* ====== PENALTY TABLE ====== */
+  .penalty-list {
+    list-style: none;
+  }
+
+  .penalty-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(42,42,69,0.5);
+  }
+
+  .penalty-item:last-child { border-bottom: none; }
+
+  .penalty-badge {
+    font-family: 'Kanit', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  .badge-warn { background: rgba(255,165,0,0.15); color: #FFA500; border: 1px solid rgba(255,165,0,0.3); }
+  .badge-map  { background: rgba(255,100,0,0.15); color: #FF6432; border: 1px solid rgba(255,100,0,0.3); }
+  .badge-match{ background: rgba(232,0,61,0.15);  color: #FF4070; border: 1px solid rgba(232,0,61,0.3); }
+  .badge-ban  { background: rgba(120,0,0,0.3);    color: #FF2020; border: 1px solid rgba(180,0,0,0.5); }
+
+  .penalty-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .penalty-text strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* ====== FOOTER NOTE ====== */
+  .footer-note {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .footer-note a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .divider-text {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 14px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .divider-text::before,
+  .divider-text::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .info-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    padding: 9px 0;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(42,42,69,0.5);
+  }
+  .info-row:last-child { border-bottom: none; }
+  .info-icon { flex-shrink: 0; }
+
+  @media (max-width: 520px) {
+    .score-table { grid-template-columns: repeat(4, 1fr); }
+    .score-pt { font-size: 18px; }
+    .section-header { padding: 14px 16px; }
+    .section-body { padding: 16px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="season-badge">Season 1 · 2026</div>
+    <div class="game-title">🏃 TalesRunner</div>
+    <div class="main-title">1st Run Tournament</div>
+    <div class="subtitle">📋 สรุปกฎการแข่งขัน Official Rulebook</div>
+    <div class="header-line"></div>
+  </div>
+
+  <!-- 1. รูปแบบการแข่ง -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚔️</div>
+      <div>
+        <span class="section-num">01</span>
+        <div class="section-title">รูปแบบการแข่งขัน</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="stat-grid">
+        <div class="stat-box">
+          <span class="stat-val">64</span>
+          <span class="stat-label">ทีมทั้งหมด</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">4v4</span>
+          <span class="stat-label">ผู้เล่นต่อทีม</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">5</span>
+          <span class="stat-label">Maps / Match</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val">KO</span>
+          <span class="stat-label">Single Elim</span>
+        </div>
+      </div>
+
+      <div class="divider-text">เส้นทางสู่แชมป์</div>
+
+      <div class="bracket">
+        <div class="bracket-step">🏟️ รอบ 64 ทีม</div>
+        <span class="bracket-arrow">›</span>
+        <div class="bracket-step">รอบ 32 ทีม</div>
+        <span class="bracket-arrow">›</span>
+        <div class="bracket-step">รอบ 16 ทีม</div>
+        <span class="bracket-arrow">›</span>
+        <div class="bracket-step">รอบ 8 ทีม</div>
+        <span class="bracket-arrow">›</span>
+        <div class="bracket-step">Semi-finals</div>
+        <span class="bracket-arrow">›</span>
+        <div class="bracket-step highlight">🏆 Grand Final</div>
+      </div>
+
+      <div style="margin-top:16px; padding:12px 16px; background:#0F0F1C; border-radius:8px; border-left:3px solid var(--gold); font-size:14px; color:var(--muted);">
+        <strong style="color:#fff;">แพ้คัดออกทันที (Single Elimination)</strong> — แต่ละ Match = 5 Maps ต่อเนื่อง · แมพใช้การสุ่ม (Random) · ห้ามใช้แมพซ้ำใน Match เดียวกัน
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. คุณสมบัติผู้สมัคร -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <div>
+        <span class="section-num">02</span>
+        <div class="section-title">คุณสมบัติผู้สมัคร</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="rule-list">
+        <li>
+          <div class="rule-dot">✓</div>
+          <div>ทีมละ <strong>4 คน + ตัวสำรอง 1 คน</strong> (ตัวสำรองไม่บังคับ) · 1 คนสมัครได้ 1 ทีมเท่านั้น</div>
+        </li>
+        <li>
+          <div class="rule-dot">✓</div>
+          <div>สงวนสิทธิ์เฉพาะ <strong>ผู้เล่นคนไทย และพำนักอาศัยในไทย</strong> เท่านั้น</div>
+        </li>
+        <li>
+          <div class="rule-dot">✓</div>
+          <div>ตัวละครต้องมียศระดับ <strong>รองเท้าบูทปีกนางฟ้าแดงขึ้นไป</strong></div>
+        </li>
+        <li>
+          <div class="rule-dot">✓</div>
+          <div>ต้องเข้า Discord <strong>TR Tournament</strong> ที่กำหนด เพื่อรับข่าวสารและกำหนดการแข่ง</div>
+        </li>
+        <li>
+          <div class="rule-dot">✓</div>
+          <div>ปิดรับเมื่อครบ 64 ทีม — <strong>"ลงทะเบียนก่อน มีสิทธิ์ก่อน"</strong></div>
+        </li>
+        <li>
+          <div class="rule-dot">✗</div>
+          <div>หลังปิดรับสมัคร <strong>ไม่อนุญาตให้เปลี่ยนแปลงรายชื่อสมาชิก</strong> ไม่ว่ากรณีใด</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. ระบบคะแนน -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📊</div>
+      <div>
+        <span class="section-num">03</span>
+        <div class="section-title">ระบบการนับคะแนน</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p style="font-size:14px; color:var(--muted); margin-bottom:14px;">คะแนนรายบุคคลต่อ 1 Map (ผลรวม 4 คน = คะแนนทีม)</p>
+      <div class="score-table">
+        <div class="score-cell top3">
+          <span class="score-rank">🥇 อันดับ 1</span>
+          <span class="score-pt">10</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell top3">
+          <span class="score-rank">🥈 อันดับ 2</span>
+          <span class="score-pt">8</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell top3">
+          <span class="score-rank">🥉 อันดับ 3</span>
+          <span class="score-pt">6</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell">
+          <span class="score-rank">อันดับ 4</span>
+          <span class="score-pt">4</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell">
+          <span class="score-rank">อันดับ 5</span>
+          <span class="score-pt">3</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell">
+          <span class="score-rank">อันดับ 6</span>
+          <span class="score-pt">2</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell">
+          <span class="score-rank">อันดับ 7</span>
+          <span class="score-pt">1</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+        <div class="score-cell">
+          <span class="score-rank">อันดับ 8</span>
+          <span class="score-pt">0</span>
+          <span class="score-label">คะแนน</span>
+        </div>
+      </div>
+
+      <div style="margin-top:14px; padding:12px 16px; background:#0F0F1C; border-radius:8px; font-size:14px;">
+        <div class="info-row">
+          <span class="info-icon">🏅</span>
+          <span><strong>ชนะ Map</strong> — ทีมที่มีคะแนนรวม 4 คนสูงกว่าชนะ Map นั้น</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🏆</span>
+          <span><strong>ชนะ Match</strong> — ทีมที่มีคะแนนรวมจากทุก Map มากกว่า</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">⚖️</span>
+          <span><strong>กรณีเสมอ</strong> — ดูจำนวน Map ที่ชนะ → Tie-breaker 1 Map → ยึดคนที่ได้อันดับ 1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. กฎสำคัญ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚠️</div>
+      <div>
+        <span class="section-num">04</span>
+        <div class="section-title">กฎสำคัญที่ต้องรู้</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="tag-grid">
+        <div class="tag">🚫 ห้ามใช้โปรแกรม/Bot/Macro</div>
+        <div class="tag">🚫 ห้ามใช้ Bug Exploit</div>
+        <div class="tag">🚫 ห้ามใช้ VPN</div>
+        <div class="tag">🚫 ห้ามเปลี่ยนตัวระหว่าง Match</div>
+        <div class="tag">🚫 ห้ามตัวละครซ้ำในทีม</div>
+      </div>
+
+      <ul class="rule-list">
+        <li>
+          <div class="rule-dot">📡</div>
+          <div>ต้อง <strong>Stream หน้าจอทั้งหมด + เปิด Task Manager</strong> ผ่าน Discord ตลอดการแข่งขัน</div>
+        </li>
+        <li>
+          <div class="rule-dot">📷</div>
+          <div><strong>เปิดกล้องขณะแข่ง</strong> และอัดวิดีโอไว้เพื่อใช้เป็นหลักฐานกรณีเกิดปัญหา</div>
+        </li>
+        <li>
+          <div class="rule-dot">🕕</div>
+          <div>เข้า Discord เตรียมตัวได้ตั้งแต่ <strong>18:00 น.</strong> ก่อนแข่ง 19:00 น. · ห้ามออกจาก Discord ระหว่างแข่ง</div>
+        </li>
+        <li>
+          <div class="rule-dot">⏱️</div>
+          <div>มีเวลาตั้งค่าตัวละคร <strong>5 นาที</strong> เท่านั้น · หัวหน้าทีมต้องยืนยันใน Discord · ไม่ขยายเวลาทุกกรณี</div>
+        </li>
+        <li>
+          <div class="rule-dot">🎮</div>
+          <div>ต้องใช้ <strong>ไอดีส่วนตัวตามที่ลงทะเบียน</strong> เท่านั้น · ห้ามสลับตัวผู้เล่น</div>
+        </li>
+        <li>
+          <div class="rule-dot">🗣️</div>
+          <div>การประท้วงหรือคัดค้านทำได้เฉพาะ <strong>หัวหน้าทีม</strong> เท่านั้น · ยื่นก่อนจบ Match หรือภายใน 1 ชม.</div>
+        </li>
+        <li>
+          <div class="rule-dot">🔁</div>
+          <div><strong>Restart</strong> อนุญาตเฉพาะหลุดก่อนจุดประตูวาร์ป (1 ครั้ง/Match) · หากหลุดหลัง 1 นาทีไม่มีการ Restart ทุกกรณี</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. บทลงโทษ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <div>
+        <span class="section-num">05</span>
+        <div class="section-title">บทลงโทษ</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <ul class="penalty-list">
+        <li class="penalty-item">
+          <span class="penalty-badge badge-warn">⚠️ ตักเตือน</span>
+          <div class="penalty-text">ความผิดเล็กน้อย เช่น <strong>พูดจาไม่เหมาะสมครั้งแรก</strong>, ประพฤติตัวไม่เหมาะสม</div>
+        </li>
+        <li class="penalty-item">
+          <span class="penalty-badge badge-map">🗺️ แพ้ Map</span>
+          <div class="penalty-text">ฝ่าฝืนกติกาใน Map เดียว เช่น <strong>เลือกตัวละครซ้ำ, ใช้ Bug Exploit</strong>, เปลี่ยนตัวละครกลาง Map</div>
+        </li>
+        <li class="penalty-item">
+          <span class="penalty-badge badge-match">❌ แพ้ Match</span>
+          <div class="penalty-text">ฝ่าฝืนซ้ำ หรือความผิดร้ายแรง เช่น <strong>ใช้โปรแกรมช่วยเล่น, สลับตัวผู้เล่น</strong>, ไม่มาลงแข่งตามตาราง</div>
+        </li>
+        <li class="penalty-item">
+          <span class="penalty-badge badge-ban">☠️ แบน</span>
+          <div class="penalty-text"><strong>แบนไอดี 99 ปี + ตัดสิทธิ์</strong> ทันที สำหรับการโกงขั้นร้ายแรง, ให้ผู้อื่นเล่นแทน, ปลอมแปลงข้อมูล</div>
+        </li>
+      </ul>
+
+      <div style="margin-top:16px; padding:12px 16px; background:rgba(232,0,61,0.08); border:1px solid rgba(232,0,61,0.2); border-radius:8px; font-size:13px; color:#FF9AB5; line-height:1.7;">
+        📌 <strong style="color:#FF4070;">การตัดสินของทีมงานถือเป็นที่สุดในทุกกรณี</strong> ผู้เข้าแข่งขันรับทราบและยอมรับกติกาทั้งหมดก่อนเข้าร่วมการแข่งขัน
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-note">
+    <p>📅 แข่งขัน <strong style="color:var(--gold)">30 มีนาคม – 24 เมษายน 2026</strong> · ทุกวัน จันทร์ / พุธ / ศุกร์ เวลา <strong style="color:var(--gold)">19:00 น.</strong></p>
+    <p style="margin-top:6px;">🏆 รางวัลรวม <strong style="color:var(--gold)">100,000 บาท</strong> · อ่านกฎเพิ่มเติมที่ Discord TalesRunner 1st Run Tournament</p>
+    <p style="margin-top:16px; color:#555; font-size:12px;">TalesRunner 1st Run Tournament · Official Rulebook · Season 1 · 2026</p>
+  </div>
+
+</div>
+</body>
+</html>
