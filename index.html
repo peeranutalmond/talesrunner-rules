@@ -3,688 +3,522 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TalesRunner 1st Run Tournament — กฎการแข่งขัน</title>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;900&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+<title>คุณเหมือนตัวละครไหนใน Tales Runner?</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --gold: #FFD700;
-    --gold2: #FFA500;
-    --red: #E8003D;
-    --dark: #0A0A12;
-    --card: #12121E;
-    --card2: #1A1A2E;
-    --border: #2A2A45;
-    --text: #E8E8F5;
-    --muted: #8888AA;
-  }
+:root {
+  --bg-primary: #0b0f2e;
+  --bg-secondary: #12173f;
+  --bg-card: #191f55;
+  --accent-blue: #4fc3f7;
+  --accent-pink: #f06292;
+  --accent-purple: #b388ff;
+  --accent-gold: #ffd54f;
+  --accent-green: #69f0ae;
+  --accent-orange: #ffab40;
+  --text-primary: #ffffff;
+  --text-secondary: #90a4ae;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Kanit','Prompt',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden;}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;animation:twinkle var(--dur) infinite;}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.9}}
 
-  body {
-    background: var(--dark);
-    color: var(--text);
-    font-family: 'Sarabun', sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
-    min-height: 100vh;
-  }
+.container{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:20px 16px;min-height:100vh;}
+.screen{display:none;}.screen.active{display:block;}
 
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,215,0,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
+/* START */
+.start-screen{text-align:center;padding-top:50px;}
+.game-badge{display:inline-block;background:linear-gradient(135deg,#ff6f00,#ffab00);padding:5px 18px;border-radius:16px;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#1a0e00;margin-bottom:18px;}
+.main-title{font-size:26px;font-weight:900;line-height:1.45;margin-bottom:10px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-pink),var(--accent-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.subtitle{font-size:14px;color:var(--text-secondary);font-weight:300;margin-bottom:36px;line-height:1.7;}
+.category-preview{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:32px;}
+.cat-chip{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:6px 14px;border-radius:20px;font-size:12px;color:var(--text-secondary);}
+.info-pills{display:flex;justify-content:center;gap:12px;margin-bottom:32px;}
+.pill{background:rgba(255,255,255,.06);padding:7px 16px;border-radius:20px;font-size:13px;color:var(--text-secondary);}
+.pill span{color:var(--accent-gold);font-weight:600;}
+.start-btn{background:linear-gradient(135deg,#ff6f00,var(--accent-pink),var(--accent-purple));border:none;color:#fff;font-family:'Kanit',sans-serif;font-size:19px;font-weight:700;padding:16px 56px;border-radius:50px;cursor:pointer;transition:all .3s;box-shadow:0 6px 30px rgba(255,111,0,.3);letter-spacing:.5px;}
+.start-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 10px 40px rgba(255,111,0,.4);}
+.start-btn:active{transform:scale(.97);}
 
-  .container {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 40px 20px 60px;
-    position: relative;
-    z-index: 1;
-  }
+/* QUIZ */
+.quiz-screen{padding-top:16px;}
+.progress-area{margin-bottom:24px;}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.q-counter{font-size:13px;color:var(--text-secondary);}
+.q-counter strong{color:var(--accent-blue);font-size:17px;}
+.cat-tag{font-size:11px;padding:4px 12px;border-radius:10px;font-weight:500;background:rgba(255,171,64,.15);color:var(--accent-orange);}
+.progress-bar{width:100%;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--accent-orange),var(--accent-pink),var(--accent-purple));}
 
-  /* ====== HEADER ====== */
-  .header {
-    text-align: center;
-    margin-bottom: 48px;
-    position: relative;
-  }
+.question-card{background:var(--bg-card);border-radius:20px;padding:24px 20px 18px;margin-bottom:16px;border:1px solid rgba(255,255,255,.05);animation:slideIn .35s ease-out;}
+@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.q-emoji{font-size:34px;margin-bottom:12px;}
+.q-text{font-size:17px;font-weight:600;line-height:1.6;}
 
-  .season-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, var(--red), #8B0020);
-    color: #fff;
-    font-family: 'Kanit', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 5px 18px;
-    border-radius: 2px;
-    margin-bottom: 18px;
-  }
+.choices{display:flex;flex-direction:column;gap:10px;}
+.choice-btn{background:var(--bg-secondary);border:2px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 18px;color:#fff;font-family:'Kanit',sans-serif;font-size:14px;font-weight:400;line-height:1.5;cursor:pointer;transition:all .2s;text-align:left;display:flex;align-items:flex-start;gap:12px;}
+.choice-btn:hover{border-color:var(--accent-blue);background:rgba(79,195,247,.06);transform:translateX(3px);}
+.choice-btn:active{transform:scale(.98);}
+.choice-btn.selected{border-color:var(--accent-gold);background:rgba(255,213,79,.08);box-shadow:0 0 18px rgba(255,213,79,.12);}
+.choice-label{flex-shrink:0;width:26px;height:26px;background:rgba(255,255,255,.08);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;margin-top:1px;}
+.choice-btn.selected .choice-label{background:var(--accent-gold);color:var(--bg-primary);}
 
-  .game-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--gold);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
+/* RESULT */
+.result-screen{text-align:center;padding-top:32px;}
+.result-card{background:var(--bg-card);border-radius:24px;padding:32px 22px;border:1px solid rgba(255,255,255,.06);margin-bottom:20px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
 
-  .main-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: clamp(32px, 6vw, 54px);
-    font-weight: 900;
-    line-height: 1.1;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B00 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 14px;
-  }
+.result-badge{display:inline-block;background:linear-gradient(135deg,var(--accent-gold),#ff9800);padding:4px 16px;border-radius:12px;font-size:11px;font-weight:700;color:var(--bg-primary);margin-bottom:16px;letter-spacing:1px;}
+.result-cat-badge{display:inline-block;background:rgba(255,255,255,.08);padding:5px 14px;border-radius:16px;font-size:13px;color:var(--text-secondary);margin-bottom:18px;}
 
-  .subtitle {
-    font-family: 'Kanit', sans-serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 1px;
-  }
+/* Character image circle */
+.result-char-img{
+  width:120px;height:120px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent-orange),var(--accent-pink));
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;box-shadow:0 0 40px rgba(255,111,0,.2);border:3px solid rgba(255,255,255,.15);
+  overflow:hidden;position:relative;
+}
+.result-char-img img{
+  width:100%;height:100%;object-fit:cover;border-radius:50%;
+}
+.result-char-img .emoji-fallback{
+  font-size:56px;line-height:1;
+}
 
-  .header-line {
-    width: 80px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold2));
-    margin: 20px auto 0;
-    border-radius: 2px;
-  }
+.result-char-name{font-size:28px;font-weight:800;margin-bottom:4px;background:linear-gradient(135deg,var(--accent-gold),var(--accent-pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.result-mbti{display:inline-block;background:rgba(255,255,255,.08);padding:5px 18px;border-radius:18px;font-size:16px;font-weight:700;letter-spacing:3px;color:var(--accent-blue);margin-bottom:16px;}
+.result-desc{font-size:14px;line-height:1.85;color:var(--text-secondary);font-weight:300;text-align:left;padding:0 2px;}
 
-  /* ====== SECTION ====== */
-  .section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    animation: fadeUp 0.5s ease both;
-  }
+.score-bars{margin-top:20px;text-align:left;}
+.score-bar-item{margin-bottom:10px;}
+.score-bar-header{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;align-items:center;}
+.score-bar-name{color:var(--text-secondary);display:flex;align-items:center;gap:6px;}
+.score-bar-name img{width:20px;height:20px;border-radius:50%;object-fit:cover;}
+.score-bar-name .mini-emoji{font-size:16px;}
+.score-bar-pct{color:var(--accent-gold);font-weight:600;}
+.score-bar-track{width:100%;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.score-bar-fill{height:100%;border-radius:3px;transition:width 1s ease;}
 
-  .section:nth-child(2) { animation-delay: 0.05s; }
-  .section:nth-child(3) { animation-delay: 0.10s; }
-  .section:nth-child(4) { animation-delay: 0.15s; }
-  .section:nth-child(5) { animation-delay: 0.20s; }
-  .section:nth-child(6) { animation-delay: 0.25s; }
+.top3-section{background:var(--bg-card);border-radius:18px;padding:18px;border:1px solid rgba(255,255,255,.05);margin-bottom:20px;text-align:left;}
+.top3-title{font-size:14px;color:var(--text-secondary);font-weight:400;margin-bottom:14px;}
+.top3-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.top3-item:last-child{border-bottom:none;}
+.top3-rank{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}
+.top3-rank.r1{background:var(--accent-gold);color:var(--bg-primary);}
+.top3-rank.r2{background:rgba(192,192,192,.3);color:#ccc;}
+.top3-rank.r3{background:rgba(205,127,50,.2);color:#cd7f32;}
+.top3-avatar{width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;}
+.top3-avatar img{width:100%;height:100%;object-fit:cover;}
+.top3-avatar .mini-emoji{font-size:22px;}
+.top3-info{flex:1;}
+.top3-name{font-size:14px;font-weight:600;}
+.top3-cat{font-size:11px;color:var(--text-secondary);}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+.retry-btn{background:transparent;border:2px solid var(--accent-orange);color:var(--accent-orange);font-family:'Kanit',sans-serif;font-size:15px;font-weight:600;padding:13px 36px;border-radius:50px;cursor:pointer;transition:all .3s;margin-bottom:40px;}
+.retry-btn:hover{background:var(--accent-orange);color:var(--bg-primary);}
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 24px;
-    background: var(--card2);
-    border-bottom: 1px solid var(--border);
-  }
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;overflow:hidden;}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-10px;animation:confettiFall var(--fall-dur) linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
 
-  .section-icon {
-    font-size: 22px;
-    line-height: 1;
-    flex-shrink: 0;
-  }
+/* Image upload hint */
+.img-hint{background:rgba(255,171,64,.08);border:1px dashed rgba(255,171,64,.3);border-radius:12px;padding:12px 16px;margin-top:20px;font-size:12px;color:var(--accent-orange);line-height:1.6;text-align:left;}
+.img-hint code{background:rgba(0,0,0,.3);padding:2px 6px;border-radius:4px;font-size:11px;}
 
-  .section-num {
-    font-family: 'Kanit', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--gold);
-    letter-spacing: 2px;
-    display: block;
-    margin-bottom: 1px;
-  }
-
-  .section-title {
-    font-family: 'Kanit', sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.2;
-  }
-
-  .section-body {
-    padding: 22px 24px;
-  }
-
-  /* ====== STAT GRID ====== */
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
-  .stat-box {
-    background: #0F0F1C;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 12px;
-    text-align: center;
-  }
-
-  .stat-val {
-    font-family: 'Kanit', sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--gold);
-    line-height: 1;
-    display: block;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 4px;
-    display: block;
-  }
-
-  /* ====== BRACKET ====== */
-  .bracket {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
-
-  .bracket-step {
-    background: #0F0F1C;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-family: 'Kanit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .bracket-step.highlight {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  .bracket-arrow {
-    color: var(--border);
-    font-size: 12px;
-  }
-
-  /* ====== RULES LIST ====== */
-  .rule-list {
-    list-style: none;
-  }
-
-  .rule-list li {
-    display: flex;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(42,42,69,0.5);
-    font-size: 15px;
-  }
-
-  .rule-list li:last-child { border-bottom: none; }
-
-  .rule-dot {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold), var(--gold2));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 700;
-    color: #000;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  /* ====== SCORE TABLE ====== */
-  .score-table {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-
-  .score-cell {
-    background: #0F0F1C;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 8px;
-    text-align: center;
-  }
-
-  .score-cell.top3 {
-    border-color: var(--gold);
-    background: rgba(255,215,0,0.06);
-  }
-
-  .score-rank {
-    font-family: 'Kanit', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--muted);
-    display: block;
-    margin-bottom: 4px;
-  }
-
-  .score-pt {
-    font-family: 'Kanit', sans-serif;
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--gold);
-    line-height: 1;
-    display: block;
-  }
-
-  .score-label {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  /* ====== WARNING TAGS ====== */
-  .tag-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-
-  .tag {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(232,0,61,0.1);
-    border: 1px solid rgba(232,0,61,0.3);
-    border-radius: 6px;
-    padding: 7px 14px;
-    font-family: 'Kanit', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #FF6B8A;
-  }
-
-  /* ====== PENALTY TABLE ====== */
-  .penalty-list {
-    list-style: none;
-  }
-
-  .penalty-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(42,42,69,0.5);
-  }
-
-  .penalty-item:last-child { border-bottom: none; }
-
-  .penalty-badge {
-    font-family: 'Kanit', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    min-width: 80px;
-    text-align: center;
-  }
-
-  .badge-warn { background: rgba(255,165,0,0.15); color: #FFA500; border: 1px solid rgba(255,165,0,0.3); }
-  .badge-map  { background: rgba(255,100,0,0.15); color: #FF6432; border: 1px solid rgba(255,100,0,0.3); }
-  .badge-match{ background: rgba(232,0,61,0.15);  color: #FF4070; border: 1px solid rgba(232,0,61,0.3); }
-  .badge-ban  { background: rgba(120,0,0,0.3);    color: #FF2020; border: 1px solid rgba(180,0,0,0.5); }
-
-  .penalty-text {
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .penalty-text strong {
-    color: #fff;
-    font-weight: 600;
-  }
-
-  /* ====== FOOTER NOTE ====== */
-  .footer-note {
-    margin-top: 32px;
-    text-align: center;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.8;
-  }
-
-  .footer-note a {
-    color: var(--gold);
-    text-decoration: none;
-  }
-
-  .divider-text {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 14px 0;
-    color: var(--muted);
-    font-size: 13px;
-  }
-
-  .divider-text::before,
-  .divider-text::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  .info-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-    padding: 9px 0;
-    font-size: 15px;
-    border-bottom: 1px solid rgba(42,42,69,0.5);
-  }
-  .info-row:last-child { border-bottom: none; }
-  .info-icon { flex-shrink: 0; }
-
-  @media (max-width: 520px) {
-    .score-table { grid-template-columns: repeat(4, 1fr); }
-    .score-pt { font-size: 18px; }
-    .section-header { padding: 14px 16px; }
-    .section-body { padding: 16px; }
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
-  }
+@media(max-width:480px){
+  .main-title{font-size:22px;}
+  .q-text{font-size:15px;}
+  .choice-btn{font-size:13px;padding:13px 14px;}
+  .result-char-name{font-size:24px;}
+}
 </style>
 </head>
 <body>
+<div class="stars" id="stars"></div>
 <div class="container">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="season-badge">Season 1 · 2026</div>
-    <div class="game-title">🏃 TalesRunner</div>
-    <div class="main-title">1st Run Tournament</div>
-    <div class="subtitle">📋 สรุปกฎการแข่งขัน Official Rulebook</div>
-    <div class="header-line"></div>
+  <!-- START -->
+  <div class="screen start-screen active" id="startScreen">
+    <div class="game-badge">TALES RUNNER</div>
+    <h1 class="main-title">คุณเหมือนตัวละครไหน<br>ใน Tales Runner?</h1>
+    <p class="subtitle">ค้นพบตัวละครที่ตรงกับบุคลิกของคุณที่สุด!<br>ตอบ 20 คำถามจากสถานการณ์ในเกม & ชีวิตจริง</p>
+    <div class="category-preview">
+      <span class="cat-chip">🏃 สายพลัง</span>
+      <span class="cat-chip">👼 สายใจดี</span>
+      <span class="cat-chip">😎 สายเท่</span>
+      <span class="cat-chip">💅 สายมั่น</span>
+      <span class="cat-chip">🌑 สายดาร์ก</span>
+      <span class="cat-chip">🧠 สายฉลาด</span>
+      <span class="cat-chip">🎭 สายจัดจ้าน</span>
+    </div>
+    <div class="info-pills">
+      <div class="pill"><span>20</span> คำถาม</div>
+      <div class="pill"><span>5</span> นาที</div>
+      <div class="pill"><span>30+</span> ตัวละคร</div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">เริ่มทำแบบทดสอบ →</button>
   </div>
 
-  <!-- 1. รูปแบบการแข่ง -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">⚔️</div>
-      <div>
-        <span class="section-num">01</span>
-        <div class="section-title">รูปแบบการแข่งขัน</div>
+  <!-- QUIZ -->
+  <div class="screen quiz-screen" id="quizScreen">
+    <div class="progress-area">
+      <div class="progress-header">
+        <span class="q-counter">คำถามที่ <strong id="qNum">1</strong> / 20</span>
+        <span class="cat-tag" id="catTag">💭 บุคลิก</span>
       </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:5%"></div></div>
     </div>
-    <div class="section-body">
-      <div class="stat-grid">
-        <div class="stat-box">
-          <span class="stat-val">64</span>
-          <span class="stat-label">ทีมทั้งหมด</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-val">4v4</span>
-          <span class="stat-label">ผู้เล่นต่อทีม</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-val">5</span>
-          <span class="stat-label">Maps / Match</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-val">KO</span>
-          <span class="stat-label">Single Elim</span>
-        </div>
-      </div>
-
-      <div class="divider-text">เส้นทางสู่แชมป์</div>
-
-      <div class="bracket">
-        <div class="bracket-step">🏟️ รอบ 64 ทีม</div>
-        <span class="bracket-arrow">›</span>
-        <div class="bracket-step">รอบ 32 ทีม</div>
-        <span class="bracket-arrow">›</span>
-        <div class="bracket-step">รอบ 16 ทีม</div>
-        <span class="bracket-arrow">›</span>
-        <div class="bracket-step">รอบ 8 ทีม</div>
-        <span class="bracket-arrow">›</span>
-        <div class="bracket-step">Semi-finals</div>
-        <span class="bracket-arrow">›</span>
-        <div class="bracket-step highlight">🏆 Grand Final</div>
-      </div>
-
-      <div style="margin-top:16px; padding:12px 16px; background:#0F0F1C; border-radius:8px; border-left:3px solid var(--gold); font-size:14px; color:var(--muted);">
-        <strong style="color:#fff;">แพ้คัดออกทันที (Single Elimination)</strong> — แต่ละ Match = 5 Maps ต่อเนื่อง · แมพใช้การสุ่ม (Random) · ห้ามใช้แมพซ้ำใน Match เดียวกัน
-      </div>
+    <div class="question-card" id="questionCard">
+      <div class="q-emoji" id="qEmoji">🎮</div>
+      <p class="q-text" id="qText">Loading...</p>
+    </div>
+    <div class="choices" id="choicesArea">
+      <button class="choice-btn" id="choiceA" onclick="selectChoice(0)"><span class="choice-label">A</span><span id="choiceAText">...</span></button>
+      <button class="choice-btn" id="choiceB" onclick="selectChoice(1)"><span class="choice-label">B</span><span id="choiceBText">...</span></button>
+      <button class="choice-btn" id="choiceC" onclick="selectChoice(2)"><span class="choice-label">C</span><span id="choiceCText">...</span></button>
     </div>
   </div>
 
-  <!-- 2. คุณสมบัติผู้สมัคร -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">📋</div>
-      <div>
-        <span class="section-num">02</span>
-        <div class="section-title">คุณสมบัติผู้สมัคร</div>
-      </div>
+  <!-- RESULT -->
+  <div class="screen result-screen" id="resultScreen">
+    <div class="confetti-container" id="confetti"></div>
+    <div class="result-card">
+      <div class="result-badge">YOUR CHARACTER</div><br>
+      <div class="result-cat-badge" id="resultCat"></div>
+      <div class="result-char-img" id="resultCharImg"></div>
+      <h2 class="result-char-name" id="resultName"></h2>
+      <div class="result-mbti" id="resultMBTI"></div>
+      <p class="result-desc" id="resultDesc"></p>
+      <div class="score-bars" id="scoreBars"></div>
     </div>
-    <div class="section-body">
-      <ul class="rule-list">
-        <li>
-          <div class="rule-dot">✓</div>
-          <div>ทีมละ <strong>4 คน + ตัวสำรอง 1 คน</strong> (ตัวสำรองไม่บังคับ) · 1 คนสมัครได้ 1 ทีมเท่านั้น</div>
-        </li>
-        <li>
-          <div class="rule-dot">✓</div>
-          <div>สงวนสิทธิ์เฉพาะ <strong>ผู้เล่นคนไทย และพำนักอาศัยในไทย</strong> เท่านั้น</div>
-        </li>
-        <li>
-          <div class="rule-dot">✓</div>
-          <div>ตัวละครต้องมียศระดับ <strong>รองเท้าบูทปีกนางฟ้าแดงขึ้นไป</strong></div>
-        </li>
-        <li>
-          <div class="rule-dot">✓</div>
-          <div>ต้องเข้า Discord <strong>TR Tournament</strong> ที่กำหนด เพื่อรับข่าวสารและกำหนดการแข่ง</div>
-        </li>
-        <li>
-          <div class="rule-dot">✓</div>
-          <div>ปิดรับเมื่อครบ 64 ทีม — <strong>"ลงทะเบียนก่อน มีสิทธิ์ก่อน"</strong></div>
-        </li>
-        <li>
-          <div class="rule-dot">✗</div>
-          <div>หลังปิดรับสมัคร <strong>ไม่อนุญาตให้เปลี่ยนแปลงรายชื่อสมาชิก</strong> ไม่ว่ากรณีใด</div>
-        </li>
-      </ul>
+    <div class="top3-section">
+      <div class="top3-title">🏆 Top 3 ตัวละครที่ใกล้เคียงกับคุณ</div>
+      <div id="top3List"></div>
     </div>
+    <button class="retry-btn" onclick="resetQuiz()">🔄 ทำแบบทดสอบอีกครั้ง</button>
   </div>
-
-  <!-- 3. ระบบคะแนน -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">📊</div>
-      <div>
-        <span class="section-num">03</span>
-        <div class="section-title">ระบบการนับคะแนน</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <p style="font-size:14px; color:var(--muted); margin-bottom:14px;">คะแนนรายบุคคลต่อ 1 Map (ผลรวม 4 คน = คะแนนทีม)</p>
-      <div class="score-table">
-        <div class="score-cell top3">
-          <span class="score-rank">🥇 อันดับ 1</span>
-          <span class="score-pt">10</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell top3">
-          <span class="score-rank">🥈 อันดับ 2</span>
-          <span class="score-pt">8</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell top3">
-          <span class="score-rank">🥉 อันดับ 3</span>
-          <span class="score-pt">6</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell">
-          <span class="score-rank">อันดับ 4</span>
-          <span class="score-pt">4</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell">
-          <span class="score-rank">อันดับ 5</span>
-          <span class="score-pt">3</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell">
-          <span class="score-rank">อันดับ 6</span>
-          <span class="score-pt">2</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell">
-          <span class="score-rank">อันดับ 7</span>
-          <span class="score-pt">1</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-        <div class="score-cell">
-          <span class="score-rank">อันดับ 8</span>
-          <span class="score-pt">0</span>
-          <span class="score-label">คะแนน</span>
-        </div>
-      </div>
-
-      <div style="margin-top:14px; padding:12px 16px; background:#0F0F1C; border-radius:8px; font-size:14px;">
-        <div class="info-row">
-          <span class="info-icon">🏅</span>
-          <span><strong>ชนะ Map</strong> — ทีมที่มีคะแนนรวม 4 คนสูงกว่าชนะ Map นั้น</span>
-        </div>
-        <div class="info-row">
-          <span class="info-icon">🏆</span>
-          <span><strong>ชนะ Match</strong> — ทีมที่มีคะแนนรวมจากทุก Map มากกว่า</span>
-        </div>
-        <div class="info-row">
-          <span class="info-icon">⚖️</span>
-          <span><strong>กรณีเสมอ</strong> — ดูจำนวน Map ที่ชนะ → Tie-breaker 1 Map → ยึดคนที่ได้อันดับ 1</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. กฎสำคัญ -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">⚠️</div>
-      <div>
-        <span class="section-num">04</span>
-        <div class="section-title">กฎสำคัญที่ต้องรู้</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div class="tag-grid">
-        <div class="tag">🚫 ห้ามใช้โปรแกรม/Bot/Macro</div>
-        <div class="tag">🚫 ห้ามใช้ Bug Exploit</div>
-        <div class="tag">🚫 ห้ามใช้ VPN</div>
-        <div class="tag">🚫 ห้ามเปลี่ยนตัวระหว่าง Match</div>
-        <div class="tag">🚫 ห้ามตัวละครซ้ำในทีม</div>
-      </div>
-
-      <ul class="rule-list">
-        <li>
-          <div class="rule-dot">📡</div>
-          <div>ต้อง <strong>Stream หน้าจอทั้งหมด + เปิด Task Manager</strong> ผ่าน Discord ตลอดการแข่งขัน</div>
-        </li>
-        <li>
-          <div class="rule-dot">📷</div>
-          <div><strong>เปิดกล้องขณะแข่ง</strong> และอัดวิดีโอไว้เพื่อใช้เป็นหลักฐานกรณีเกิดปัญหา</div>
-        </li>
-        <li>
-          <div class="rule-dot">🕕</div>
-          <div>เข้า Discord เตรียมตัวได้ตั้งแต่ <strong>18:00 น.</strong> ก่อนแข่ง 19:00 น. · ห้ามออกจาก Discord ระหว่างแข่ง</div>
-        </li>
-        <li>
-          <div class="rule-dot">⏱️</div>
-          <div>มีเวลาตั้งค่าตัวละคร <strong>5 นาที</strong> เท่านั้น · หัวหน้าทีมต้องยืนยันใน Discord · ไม่ขยายเวลาทุกกรณี</div>
-        </li>
-        <li>
-          <div class="rule-dot">🎮</div>
-          <div>ต้องใช้ <strong>ไอดีส่วนตัวตามที่ลงทะเบียน</strong> เท่านั้น · ห้ามสลับตัวผู้เล่น</div>
-        </li>
-        <li>
-          <div class="rule-dot">🗣️</div>
-          <div>การประท้วงหรือคัดค้านทำได้เฉพาะ <strong>หัวหน้าทีม</strong> เท่านั้น · ยื่นก่อนจบ Match หรือภายใน 1 ชม.</div>
-        </li>
-        <li>
-          <div class="rule-dot">🔁</div>
-          <div><strong>Restart</strong> อนุญาตเฉพาะหลุดก่อนจุดประตูวาร์ป (1 ครั้ง/Match) · หากหลุดหลัง 1 นาทีไม่มีการ Restart ทุกกรณี</div>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 5. บทลงโทษ -->
-  <div class="section">
-    <div class="section-header">
-      <div class="section-icon">⚖️</div>
-      <div>
-        <span class="section-num">05</span>
-        <div class="section-title">บทลงโทษ</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <ul class="penalty-list">
-        <li class="penalty-item">
-          <span class="penalty-badge badge-warn">⚠️ ตักเตือน</span>
-          <div class="penalty-text">ความผิดเล็กน้อย เช่น <strong>พูดจาไม่เหมาะสมครั้งแรก</strong>, ประพฤติตัวไม่เหมาะสม</div>
-        </li>
-        <li class="penalty-item">
-          <span class="penalty-badge badge-map">🗺️ แพ้ Map</span>
-          <div class="penalty-text">ฝ่าฝืนกติกาใน Map เดียว เช่น <strong>เลือกตัวละครซ้ำ, ใช้ Bug Exploit</strong>, เปลี่ยนตัวละครกลาง Map</div>
-        </li>
-        <li class="penalty-item">
-          <span class="penalty-badge badge-match">❌ แพ้ Match</span>
-          <div class="penalty-text">ฝ่าฝืนซ้ำ หรือความผิดร้ายแรง เช่น <strong>ใช้โปรแกรมช่วยเล่น, สลับตัวผู้เล่น</strong>, ไม่มาลงแข่งตามตาราง</div>
-        </li>
-        <li class="penalty-item">
-          <span class="penalty-badge badge-ban">☠️ แบน</span>
-          <div class="penalty-text"><strong>แบนไอดี 99 ปี + ตัดสิทธิ์</strong> ทันที สำหรับการโกงขั้นร้ายแรง, ให้ผู้อื่นเล่นแทน, ปลอมแปลงข้อมูล</div>
-        </li>
-      </ul>
-
-      <div style="margin-top:16px; padding:12px 16px; background:rgba(232,0,61,0.08); border:1px solid rgba(232,0,61,0.2); border-radius:8px; font-size:13px; color:#FF9AB5; line-height:1.7;">
-        📌 <strong style="color:#FF4070;">การตัดสินของทีมงานถือเป็นที่สุดในทุกกรณี</strong> ผู้เข้าแข่งขันรับทราบและยอมรับกติกาทั้งหมดก่อนเข้าร่วมการแข่งขัน
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer-note">
-    <p>📅 แข่งขัน <strong style="color:var(--gold)">30 มีนาคม – 24 เมษายน 2026</strong> · ทุกวัน จันทร์ / พุธ / ศุกร์ เวลา <strong style="color:var(--gold)">19:00 น.</strong></p>
-    <p style="margin-top:6px;">🏆 รางวัลรวม <strong style="color:var(--gold)">100,000 บาท</strong> · อ่านกฎเพิ่มเติมที่ Discord TalesRunner 1st Run Tournament</p>
-    <p style="margin-top:16px; color:#555; font-size:12px;">TalesRunner 1st Run Tournament · Official Rulebook · Season 1 · 2026</p>
-  </div>
-
 </div>
+
+<script>
+// ===== CHARACTER DATABASE =====
+// imageUrl: ใส่ URL รูปตัวละครที่ host เอง (imgur, cloudinary, etc.)
+// ถ้า imageUrl ว่าง จะ fallback ไปใช้ emoji
+const chars = {
+  chowon:  { name:"โชวอน (Chowon)", emoji:"🏃", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/c/c5/Charlie_icon.png/revision/latest?cb=20220207170109", mbti:"ESFJ", cat:"🏃 สายพลังงานล้น", desc:"คุณคือคนบ้าพลังและมุ่งมั่น! ไม่ยอมแพ้อะไรง่ายๆ มีสปิริตนักสู้เต็มเปี่ยม ชอบตั้งเป้าหมายและพุ่งชนมัน รักการแข่งขันและชอบพัฒนาตัวเองอยู่เสมอ" },
+  mingming:{ name:"หมิงหมิง (Ming Ming)", emoji:"🌟", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/b/ba/Mingming_icon.png/revision/latest?cb=20220207170238", mbti:"ENFP", cat:"🏃 สายพลังงานล้น", desc:"คุณคือเอนเตอร์เทนเนอร์ประจำกลุ่ม! ร่าเริง สดใส ซุกซน พลังงานบวกเหลือล้น ไปอยู่ที่ไหนก็สร้างรอยยิ้มและเสียงหัวเราะให้คนรอบข้างได้เสมอ" },
+  bada:    { name:"พาดา (Bada)", emoji:"⚡", imageUrl:"https://static.wikia.nocookie.net/talesrunnerplus/images/9/95/Ocean_icon.png/revision/latest?cb=20190319040606&path-prefix=th", mbti:"ESTP", cat:"🏃 สายพลังงานล้น", desc:"คุณคือสายลุยผู้รักอิสระ! แอคทีฟ ไฮเปอร์นิดๆ ไม่ชอบถูกตีกรอบ รักธรรมชาติและการผจญภัยเป็นที่สุด" },
+  lucy:    { name:"ลูซี่ (Lucy)", emoji:"🧚", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/8/88/Character19.png/revision/latest?cb=20220207171124", mbti:"INFJ", cat:"🏃 สายพลังงานล้น", desc:"คุณคือภูตน้อยแสนซน! คิ้วท์ๆ ร่าเริงเหมือนเด็ก ขี้สงสัยในทุกเรื่อง พร้อมกระโจนเข้าหาความสนุกสนานใหม่ๆ ตลอดเวลา" },
+  lina:    { name:"ลีน่า (Lina)", emoji:"🌸", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/3/35/Lina_icon.png/revision/latest?cb=20220207170320", mbti:"INFP", cat:"👼 สายคนดี", desc:"คุณคือแม่พระ/พ่อพระประจำกลุ่ม! ใจดี อ่อนโยน มีน้ำใจ ชอบเทคแคร์และช่วยเหลือคนอื่นเสมอ ใครอยู่ใกล้ก็รู้สึกอบอุ่น" },
+  bigbo:   { name:"บิ๊กโบ (Big Bo)", emoji:"🐻", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/4/48/Big_bo_icon.png/revision/latest?cb=20220207170355", mbti:"ISFJ", cat:"👼 สายคนดี", desc:"คุณคือพี่ใหญ่สายซัพพอร์ต! ภายนอกดูพึ่งพาได้ ลึกๆ เป็นคนใจดี รักสงบ เป็นมิตรกับทุกคน และมีความสุขที่สุดตอนได้กินของอร่อย!" },
+  shiho:   { name:"ชิโฮะ (Shiho)", emoji:"🐰", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/a/ae/Shiho-Face2.png/revision/latest?cb=20220207171046", mbti:"INFP", cat:"👼 สายคนดี", desc:"คุณคือเด็กน้อยผู้ใสซื่อ! จิตใจบริสุทธิ์ รักสัตว์ มองโลกในแง่ดีสุดๆ เป็นเซฟโซนของเพื่อนๆ ใครเห็นก็อดเอ็นดูไม่ได้" },
+  miho:    { name:"มิโฮะ (Miho)", emoji:"🛡️", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/7/75/Character20.png/revision/latest?cb=20220207171140", mbti:"ESFP", cat:"👼 สายคนดี", desc:"คุณคือผู้พิทักษ์ของเพื่อนๆ! ร่าเริง สดใส ให้ความสำคัญกับมิตรภาพมากๆ พร้อมปกป้องและออกรับแทนคนที่รักเสมอ" },
+  lala:    { name:"ลาล่า (LaLa)", emoji:"🌼", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/f/fb/Lalaicon.png/revision/latest?cb=20190511214256", mbti:"ESTJ", cat:"👼 สายคนดี", desc:"คุณคือคุณหนูผู้มองโลกในแง่ดี! ร่าเริง สดใส อยากรู้อยากเห็นสิ่งใหม่ๆ นอกกรอบ มักจะมองเห็นความสวยงามในสิ่งเล็กๆ รอบตัว" },
+  rough:   { name:"ราฟ (Rough)", emoji:"🔥", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/1/1f/Rough_icon.png/revision/latest?cb=20220207170536", mbti:"ESFP", cat:"😎 สายเท่แอบซึน", desc:"คุณคือคนเท่ที่แสนอบอุ่น! ภายนอกดูห้าวหาญ ลุยๆ สปิริตสูง แต่จริงๆ มีมุมอ่อนโยนและรักคนสำคัญแบบสุดหัวใจ" },
+  kai:     { name:"กาย (Kai)", emoji:"❄️", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/d/d5/Kai_icon.png/revision/latest?cb=20220207170626", mbti:"INFP", cat:"😎 สายเท่แอบซึน", desc:"คุณคือจอมซึนเดเระตัวจริง! ภายนอกดูเย็นชา หยิ่งๆ ปากแข็ง แต่จริงๆ แคร์คนรอบข้างมากๆ แค่แสดงออกไม่เก่ง" },
+  yuki:    { name:"ยูกิ (Yuki)", emoji:"🧊", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/4/4a/Yuki_icon.png/revision/latest?cb=20220207170648", mbti:"ISFJ", cat:"😎 สายเท่แอบซึน", desc:"คุณคือคนเจ้าระเบียบสุดคูล! นิ่งขรึม รับผิดชอบสูง ทำอะไรต้องเป๊ะตามแผน เป็นที่พึ่งพาได้เสมอในยามคับขัน" },
+  didi:    { name:"ดีดี้ (DnD)", emoji:"💃", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/c/c0/Dnd_icon.png/revision/latest?cb=20220207170413", mbti:"ESFP", cat:"💅 สายแฟชั่น", desc:"คุณคือตัวแม่ผู้เลิศเลอ! มั่นใจในตัวเองสูง รักสวยรักงาม แฟชั่นนิสต้าตัวยง อาจเอาแต่ใจนิดๆ แต่คุณรู้ว่าตัวเองมีค่าแค่ไหน!" },
+  narcius: { name:"เนสสึ (Narcius)", emoji:"🪞", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/9/92/Apollo_icon.png/revision/latest?cb=20220207170438", mbti:"ISTP", cat:"💅 สายแฟชั่น", desc:"คุณคือคนคลั่งรัก...ตัวเอง! ดูแลตัวเองเป๊ะทุกองศา ชอบความสมบูรณ์แบบ มั่นใจในรูปร่างหน้าตา เชื่อว่าตัวเองเด่นที่สุด" },
+  abel:    { name:"อาเบล (Abel)", emoji:"🎩", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/4/4f/Abel_icon.png/revision/latest?cb=20220207170723", mbti:"ISTJ", cat:"💅 สายแฟชั่น", desc:"คุณคือผู้ดีมาดเนี๊ยบ! เจ้าระเบียบ รสนิยมสูง รักความสะอาด พิถีพิถัน ไม่ชอบอะไรที่ดูไม่แพงหรือไม่สมฐานะ" },
+  maki:    { name:"มากิ (Maki)", emoji:"🌑", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/8/88/Maki_icon.png/revision/latest?cb=20220207170502", mbti:"INTJ", cat:"🌑 สายดาร์ก", desc:"คุณคือสายอินดี้โลกส่วนตัวสูง! พูดน้อย ขี้อาย ชอบปลีกวิเวก สนใจเรื่องลี้ลับหรือเรื่องแปลกๆ ที่คนอื่นไม่ค่อยสนใจ" },
+  haru:    { name:"ฮารุ (Haru)", emoji:"⛈️", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/0/08/Jin.png/revision/latest?cb=20220207170754", mbti:"INTJ", cat:"🌑 สายดาร์ก", desc:"คุณคือคนดาร์กๆ ที่มีมุมอ่อนไหว! อาจอารมณ์ร้อนหรือมีกำแพงในใจ แต่ลึกซึ้งและมักต่อสู้กับความรู้สึกของตัวเองอยู่บ่อยๆ" },
+  vera:    { name:"เวร่า (Vera)", emoji:"🦇", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/4/48/Vera_icon.png/revision/latest?cb=20220207170821", mbti:"ENFP", cat:"🌑 สายดาร์ก", desc:"คุณคือแวมไพร์จอมเหวี่ยง! เอาแต่ใจ หงุดหงิดง่าย แต่ความร้ายกาจกลับเป็นเสน่ห์ที่ดึงดูดคนอื่นสุดๆ" },
+  chloe:   { name:"โคลอี้ (Chloe)", emoji:"🖤", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/8/84/ChloeRender.png/revision/latest?cb=20231210181823", mbti:"ISTP", cat:"🌑 สายดาร์ก", desc:"คุณคือคนสตรองสายเงียบ! นิ่ง คูล ไม่ค่อยแสดงอารมณ์ แต่เวลาเอาจริงขึ้นมา จะโฟกัสและน่ากลัวมาก" },
+  r_char:  { name:"อาร์ (R)", emoji:"🔬", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/f/f5/Character21.png/revision/latest?cb=20220207171208", mbti:"INTP", cat:"🧠 สายฉลาด", desc:"คุณคือมนุษย์ตรรกะ! ใช้เหตุผลนำหน้าอารมณ์ ทำงานเป็นระบบ เป๊ะทุกขั้นตอน แก้ปัญหาเก่งเหมือนมีคอมพิวเตอร์ในหัว" },
+  elims:   { name:"เอลลิมส์ สไมล์ (Elims Smile)", emoji:"💡", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/e/e7/ElimsIcon.png/revision/latest?cb=20190928152202", mbti:"ENTP", cat:"🧠 สายฉลาด", desc:"คุณคือเนิร์ดผู้คลั่งไคล้! เมื่อชอบอะไรจะอินและศึกษาลึกแบบสุดโต่ง อินดี้ เป็นตัวของตัวเองสูง บางครั้งคนอื่นเดาใจไม่ถูก" },
+  cain:    { name:"เคน (Cain)", emoji:"🎭", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/5/56/CainIcon.png/revision/latest?cb=20190928152155", mbti:"INFJ", cat:"🧠 สายฉลาด", desc:"คุณคือจอมเจ้าเล่ห์พราวเสน่ห์! พูดจาดี ดึงดูดคนเก่ง มีเสน่ห์แพรวพราว แต่ไม่มีใครรู้ว่าจริงๆ คุณกำลังคิดอะไรอยู่" },
+  kuro:    { name:"คุโระ (Kuro)", emoji:"🐺", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/3/3b/Kuro_icon.png/revision/latest?cb=20220207170705", mbti:"ESFJ", cat:"🎭 สายจัดจ้าน", desc:"คุณคือสายห้าวผู้รักครอบครัว! พลังงานล้น ชอบความท้าทาย รักพี่น้อง/ครอบครัวมาก พร้อมลุยแหลกเพื่อปกป้องคนที่รัก" },
+  wukong:  { name:"หงอคง (Sun Wukong)", emoji:"🐵", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/9/93/Sun_wukong.png/revision/latest?cb=20220207170848", mbti:"ESTP", cat:"🎭 สายจัดจ้าน", desc:"คุณคือจอมซนจอมป่วน! อยู่ไม่นิ่ง ชอบแกล้งคนอื่น รักความท้าทาย สร้างเรื่องวุ่นๆ แฝงความสนุกให้กลุ่มเพื่อน" },
+  harang:  { name:"ฮารัง (Harang)", emoji:"🍃", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/9/90/Harangicon.jpg/revision/latest?cb=20180812181352", mbti:"ISFJ", cat:"🎭 สายจัดจ้าน", desc:"คุณคือสายชิลผู้บรรลุ! รักความสงบ ปล่อยวางเก่ง ไม่ค่อยเครียด มีความเป็นผู้ใหญ่สูง ชอบใช้ชีวิตแบบสโลว์ไลฟ์" },
+  yeono:   { name:"ยอนโอ (Yeon-O)", emoji:"👑", imageUrl:"https://static.wikia.nocookie.net/talesrunner/images/f/f3/Yanoicon.png/revision/latest?cb=20200311135721", mbti:"ENFJ", cat:"🎭 สายจัดจ้าน", desc:"คุณคือผู้นำโดยธรรมชาติ! ยึดมั่นในหน้าที่และความถูกต้อง เข้มแข็ง พร้อมเป็นเสาหลักให้คนอื่นพึ่งพา" },
+  titi:    { name:"ทีที้ (Titi)", emoji:"😈", imageUrl:"https://i.namu.wiki/i/UI8Ix6t-8el9jDjlViAg5aleduydjagu66GejsJ5fvJ7aotLouvqmq_wqIsnvqA4DifDOFW6C4A_2oqZZYf9Zg.webp", mbti:"ESFP", cat:"🎭 สายจัดจ้าน", desc:"คุณคือคนสองอารมณ์! อารมณ์สวิงเก่ง บทจะดีก็เป็นนางฟ้าแสนหวาน แต่ถ้าโกรธขึ้นมา... พร้อมแปลงร่างเป็นปีศาจทำลายล้าง!" }
+};
+
+// Helper: render avatar (image or emoji fallback)
+function renderAvatar(ch, size) {
+  if (ch.imageUrl) {
+    return `<img src="${ch.imageUrl}" alt="${ch.name}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:50%;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="mini-emoji" style="display:none;font-size:${Math.round(size*0.6)}px;">${ch.emoji}</span>`;
+  }
+  return `<span class="mini-emoji" style="font-size:${Math.round(size*0.6)}px;">${ch.emoji}</span>`;
+}
+
+function renderResultAvatar(ch) {
+  if (ch.imageUrl) {
+    return `<img src="${ch.imageUrl}" alt="${ch.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="emoji-fallback" style="display:none;">${ch.emoji}</span>`;
+  }
+  return `<span class="emoji-fallback">${ch.emoji}</span>`;
+}
+
+// ===== QUESTIONS =====
+const questions = [
+  { emoji:"🎮", text:"เพื่อนชวนเข้าห้องแข่ง Tales Runner แต่ห้องเต็มไปด้วยคนแปลกหน้า คุณจะ...", tag:"💭 บุคลิก",
+    choices:[
+      { text:"เข้าเลย! ยิ่งเยอะยิ่งมันส์ สนุกที่ได้เจอคนใหม่ 🎉", scores:{chowon:2,mingming:3,didi:2,kuro:2,wukong:2,titi:1} },
+      { text:"เข้าได้ แต่จะเงียบๆ สังเกตก่อนค่อยปรับตัว 👀", scores:{kai:2,yuki:2,abel:2,mac:2,chloe:2,r_char:1} },
+      { text:"ขอเข้าห้องที่มีแต่เพื่อนดีกว่า สบายใจกว่าเยอะ 🤝", scores:{lina:2,bigbo:2,shiho:2,harang:2,miho:1} }
+    ]
+  },
+  { emoji:"🧩", text:"เจอด่านยากมากใน Tales Runner ลองหลายรอบแล้วยังผ่านไม่ได้ คุณจะ...", tag:"🧠 วิธีคิด",
+    choices:[
+      { text:"ลุยต่อ! ลองไปเรื่อยๆ จนกว่าจะผ่าน ไม่มีคำว่าถอย 🔥", scores:{chowon:3,rough:2,bada:2,kuro:2,wukong:1} },
+      { text:"หยุดคิดก่อน วิเคราะห์ว่าพลาดตรงไหน แล้วปรับแผน 🧠", scores:{r_char:3,mac:2,maki:2,yuki:2,elims:2,abel:1} },
+      { text:"ชวนเพื่อนมาช่วย! ทำด้วยกันสนุกกว่าเยอะ 💪", scores:{mingming:2,miho:2,lina:2,bigbo:1,kuro:1,lucy:1} }
+    ]
+  },
+  { emoji:"👗", text:"ได้คูปองเลือกชุดใหม่ให้ตัวละครฟรี 1 ชุด คุณเลือกยังไง?", tag:"💅 สไตล์",
+    choices:[
+      { text:"ชุดที่สวยที่สุด หรูที่สุด ต้องเด่นกว่าคนอื่น! 💎", scores:{didi:3,narcius:3,abel:2,vera:1} },
+      { text:"ชุดที่คูลๆ ดาร์กๆ มีสไตล์เฉพาะตัว 🖤", scores:{maki:2,haru:2,chloe:2,rough:2,kai:1} },
+      { text:"ชุดน่ารักๆ ชุดไหนก็ได้ที่ดูดี ไม่เน้นโชว์ 🌸", scores:{lina:2,shiho:2,lala:2,harang:2,lucy:1,bigbo:1} }
+    ]
+  },
+  { emoji:"😡", text:"เพื่อนสองคนทะเลาะกันหนักมาก คุณจะทำยังไง?", tag:"💭 บุคลิก",
+    choices:[
+      { text:"เข้าไปไกล่เกลี่ยเลย ไม่ชอบเห็นคนทะเลาะกัน 🕊️", scores:{lina:3,yeono:2,bigbo:2,miho:2,chowon:1} },
+      { text:"ปล่อยให้เขาจัดการกันเอง ไม่ใช่เรื่องของเรา 🤷", scores:{maki:2,chloe:2,haru:2,r_char:1,mac:1,harang:1} },
+      { text:"แอบสนุกกับดราม่านิดนึง... 🍿 แต่ก็ช่วยถ้ารุนแรงเกินไป", scores:{vera:2,wukong:2,titi:2,mingming:1,elims:1} }
+    ]
+  },
+  { emoji:"☀️", text:"วันเสาร์ว่างทั้งวัน! Perfect day ของคุณคืออะไร?", tag:"🏖️ ไลฟ์สไตล์",
+    choices:[
+      { text:"ออกไปผจญภัย! ปีนเขา ท่องเที่ยว ลองอะไรใหม่ๆ 🏔️", scores:{bada:3,chowon:2,rough:2,wukong:2,lucy:1} },
+      { text:"อยู่บ้านเล่นเกม ดูหนัง สบายๆ กับตัวเอง 🎮", scores:{maki:2,haru:2,r_char:2,harang:2,kai:1,shiho:1} },
+      { text:"นัดเจอเพื่อน ไปกินข้าว ช้อปปิ้ง สังสรรค์ 🛍️", scores:{mingming:2,didi:2,lala:2,miho:2,narcius:1} }
+    ]
+  },
+  { emoji:"👑", text:"กิลด์ใน Tales Runner ต้องการหัวหน้าคนใหม่ คุณจะ...", tag:"👑 ผู้นำ",
+    choices:[
+      { text:"สมัครเลย! เรามีความเป็นผู้นำ จัดการได้แน่นอน 💪", scores:{yeono:3,chowon:2,kuro:2,didi:1,rough:1} },
+      { text:"ไม่สมัคร แต่พร้อม support หัวหน้าคนใหม่เต็มที่ 🤝", scores:{bigbo:2,yuki:2,lina:2,miho:2,harang:1,shiho:1} },
+      { text:"ไม่สนใจตำแหน่ง เราชอบเล่นอิสระมากกว่า 🦅", scores:{bada:2,maki:2,elims:2,vera:1,haru:1,wukong:1} }
+    ]
+  },
+  { emoji:"💔", text:"เวลาเสียใจหรือผิดหวัง คุณมักจะ...", tag:"💭 อารมณ์",
+    choices:[
+      { text:"ร้องไห้ออกมาเลย หรือระบายกับเพื่อนสนิท 😭", scores:{shiho:2,lina:2,lucy:2,lala:2,titi:2,miho:1} },
+      { text:"เก็บไว้ในใจ ไม่อยากให้ใครเห็นว่าเราอ่อนแอ 😶", scores:{kai:3,rough:2,haru:2,chloe:2,yuki:1,mac:1} },
+      { text:"หาอะไรทำเพื่อลืม — ออกกำลังกาย เล่นเกม ทำงาน 💨", scores:{chowon:2,bada:2,r_char:2,wukong:1,narcius:1,elims:1} }
+    ]
+  },
+  { emoji:"🤗", text:"เพื่อนๆ มักจะนิยามคุณว่าเป็นคนแบบไหนในกลุ่ม?", tag:"👥 บทบาท",
+    choices:[
+      { text:"คนตลก ตัวสร้างสีสัน ไม่มีเราไม่มีเสียงหัวเราะ 😂", scores:{mingming:3,wukong:2,titi:2,lucy:1,bada:1} },
+      { text:"คนให้คำปรึกษา เพื่อนเศร้ามาหาเราก่อนเลย 🫂", scores:{lina:3,bigbo:2,yeono:2,harang:2,shiho:1} },
+      { text:"คนที่เงียบๆ แต่เวลาพูดทีก็จัดหนักจัดเต็ม 🎯", scores:{r_char:2,maki:2,kai:2,chloe:2,mac:2,elims:1} }
+    ]
+  },
+  { emoji:"🏆", text:"แข่ง Race อยู่ที่ 1 แต่เพื่อนสนิทอยู่ที่สุดท้าย คุณจะ...", tag:"🏁 แข่งขัน",
+    choices:[
+      { text:"ชนะก่อน! เดี๋ยวเกมหน้าค่อยช่วย 🥇", scores:{chowon:2,didi:2,narcius:2,r_char:1,abel:1} },
+      { text:"ชะลอลง รอเพื่อน ไปด้วยกันดีกว่า 🤝", scores:{lina:2,miho:3,bigbo:2,shiho:1,lala:1} },
+      { text:"ชนะแล้วแหย่เพื่อน 'อุ๊ย ช้าจัง~' ให้สนุก 😜", scores:{mingming:2,wukong:3,vera:2,titi:1,rough:1} }
+    ]
+  },
+  { emoji:"🏠", text:"ถ้าตกแต่งห้องได้ตามใจ ห้องคุณจะเป็นแบบไหน?", tag:"💅 สไตล์",
+    choices:[
+      { text:"มินิมอล สีขาว เรียบหรู เป็นระเบียบทุกอย่าง ✨", scores:{abel:3,yuki:2,narcius:2,yeono:1} },
+      { text:"ดาร์กโทน มีของสะสมแปลกๆ บรรยากาศลึกลับ 🕯️", scores:{maki:3,haru:2,vera:2,chloe:2,elims:1} },
+      { text:"สีสันสดใส มีตุ๊กตา ของน่ารักเต็มไปหมด 🧸", scores:{shiho:2,lala:2,lucy:2,mingming:2,lina:1,miho:1} }
+    ]
+  },
+  { emoji:"⏰", text:"พรุ่งนี้สอบ/ส่งงาน แต่ยังไม่ได้เริ่มเลย! คุณจะ...", tag:"🧠 วิธีคิด",
+    choices:[
+      { text:"ทำทั้งคืน! กาแฟหนึ่งแก้ว ลุยจนเสร็จ ⚡", scores:{chowon:2,rough:2,kuro:2,yeono:2,didi:1} },
+      { text:"จัดตารางก่อน แบ่งเป็น step ค่อยๆ ทำทีละส่วน 📋", scores:{r_char:2,yuki:2,abel:2,mac:1,harang:1} },
+      { text:"... ช่างมัน เดี๋ยวพรุ่งนี้ค่อย improvise 🫠", scores:{bada:2,wukong:2,mingming:1,vera:1,titi:1,harang:1} }
+    ]
+  },
+  { emoji:"🗡️", text:"มีคนมาพูดไม่ดีเรื่องเพื่อนสนิทลับหลัง คุณจะ...", tag:"💭 บุคลิก",
+    choices:[
+      { text:"สู้เลย! ไม่มีใครพูดเรื่องเพื่อนเราได้! 🔥", scores:{kuro:3,rough:2,miho:2,chowon:1,titi:1} },
+      { text:"ไปบอกเพื่อนเงียบๆ ให้รู้ตัว ไม่อยากดราม่า 🤫", scores:{kai:2,mac:2,yuki:2,lina:1,shiho:1,bigbo:1} },
+      { text:"พูดกลับแบบแดกดัน ให้รู้ไปว่าเราไม่โอเค 😏", scores:{vera:2,didi:2,elims:2,chloe:1,narcius:1,wukong:1} }
+    ]
+  },
+  { emoji:"🎤", text:"ในงานปาร์ตี้ คุณมักจะ...", tag:"🎭 บทบาท",
+    choices:[
+      { text:"อยู่กลางวง! ร้องเพลง เต้น เป็นตัวเอกของงาน 🌟", scores:{mingming:3,didi:3,titi:2,wukong:1} },
+      { text:"คุยกับคนที่สนิท อยู่มุมสบายๆ ไม่ต้องเด่น 🛋️", scores:{harang:2,bigbo:2,kai:2,maki:2,shiho:1,lina:1} },
+      { text:"สังเกตคนอื่น... อ่านคน วิเคราะห์พฤติกรรม 👁️", scores:{mac:3,cain:2,r_char:2,chloe:1,elims:1} }
+    ]
+  },
+  { emoji:"🌍", text:"ถ้าได้ไปผจญภัยในโลก Tales Runner จริงๆ คุณจะทำอะไรก่อน?", tag:"🗺️ ผจญภัย",
+    choices:[
+      { text:"วิ่งสำรวจทุกมุม! ยิ่งอันตรายยิ่งดี 🗺️", scores:{bada:3,lucy:2,wukong:2,chowon:1,rough:1} },
+      { text:"หาข้อมูลก่อน ศึกษาแมพ วางแผนเส้นทาง 📖", scores:{r_char:2,mac:2,yuki:2,abel:1,elims:1,maki:1} },
+      { text:"หาเพื่อนร่วมทาง ไม่อยากไปคนเดียว 👫", scores:{lina:2,miho:2,mingming:2,bigbo:1,kuro:1,lala:1} }
+    ]
+  },
+  { emoji:"✨", text:"ถ้ามี superpower ได้ 1 อย่าง คุณเลือกอะไร?", tag:"✨ จินตนาการ",
+    choices:[
+      { text:"พลังวิ่งเร็วสุดในโลก! ไม่มีใครเกิน ⚡", scores:{chowon:2,bada:2,rough:2,kuro:2,wukong:1} },
+      { text:"อ่านใจคนอื่นได้ รู้ว่าเขาคิดอะไร 🔮", scores:{cain:3,mac:2,maki:2,chloe:1,elims:1} },
+      { text:"รักษาคนอื่นได้ ใครเจ็บก็ช่วยได้หมด 💚", scores:{lina:3,shiho:2,bigbo:2,miho:1,harang:1} }
+    ]
+  },
+  { emoji:"🪞", text:"คุณมองตัวเองยังไง?", tag:"💭 บุคลิก",
+    choices:[
+      { text:"มั่นใจ! เราเป็นเราได้ดีที่สุด รักตัวเองสุดๆ 💅", scores:{didi:3,narcius:3,vera:1,rough:1} },
+      { text:"ธรรมดา ไม่ได้เด่นอะไร แต่ก็โอเค เป็นตัวเอง 😊", scores:{shiho:2,harang:2,bigbo:2,lina:1,lala:1,lucy:1} },
+      { text:"ซับซ้อน มีหลายด้านที่คนอื่นไม่ค่อยรู้ 🎭", scores:{haru:2,kai:2,maki:2,cain:2,chloe:1,mac:1} }
+    ]
+  },
+  { emoji:"🎁", text:"มีคนเซอร์ไพรส์จัดวันเกิดให้! Reaction แรกคือ...", tag:"💭 อารมณ์",
+    choices:[
+      { text:"ร้องกรี๊ด ดีใจมาก! กอดทุกคนเลย 🥹", scores:{mingming:2,lucy:2,lala:2,miho:2,titi:1,shiho:1} },
+      { text:"ยิ้มๆ ดีใจมาก แต่ไม่ค่อยแสดงออก... เขินๆ ☺️", scores:{kai:3,yuki:2,maki:2,haru:1,harang:1} },
+      { text:"แอบตรวจสอบก่อนว่ามีอะไรซ่อนไหม... 🤨 แล้วค่อยดีใจ", scores:{r_char:2,mac:2,elims:2,chloe:1,abel:1,cain:1} }
+    ]
+  },
+  { emoji:"⚔️", text:"ถ้าทีมต้องไป raid บอส คุณจะรับบทไหน?", tag:"⚔️ บทบาท",
+    choices:[
+      { text:"แทงค์/DPS! เข้าหน้าเลย ลุยบอสตัวต่อตัว 🗡️", scores:{chowon:2,rough:2,kuro:2,bada:1,wukong:1,yeono:1} },
+      { text:"Support/Healer! คอยบัฟเพื่อน ดูแลทีม 💚", scores:{lina:2,bigbo:2,shiho:2,miho:2,harang:1,yuki:1} },
+      { text:"Strategist! วางแผน จัดทีม บอกจังหวะโจมตี 🧠", scores:{r_char:2,mac:2,yeono:2,elims:1,maki:1,abel:1} }
+    ]
+  },
+  { emoji:"🌙", text:"ตอนดึกๆ คนเดียว คุณมักจะทำอะไร?", tag:"🌙 ไลฟ์สไตล์",
+    choices:[
+      { text:"เปิดเพลง คิดเรื่องลึกๆ ครุ่นคิดเรื่องชีวิต 🎶", scores:{haru:3,maki:2,kai:2,chloe:1,shiho:1} },
+      { text:"เล่นเกม ดูคลิป เลื่อน feed ไปเรื่อยจนหลับ 📱", scores:{bada:2,mingming:2,wukong:2,titi:1,lucy:1,lala:1} },
+      { text:"วางแผนพรุ่งนี้ จด to-do list เตรียมตัวล่วงหน้า 📝", scores:{yuki:2,abel:2,yeono:2,r_char:1,chowon:1} }
+    ]
+  },
+  { emoji:"🔥", text:"คำพูดไหนที่ตรงกับคุณมากที่สุด?", tag:"💫 ปรัชญาชีวิต",
+    choices:[
+      { text:"'ชีวิตสั้น สนุกให้สุด ลุยให้เต็มที่!' 🚀", scores:{mingming:2,bada:2,didi:2,wukong:2,titi:1,rough:1,chowon:1,lucy:1} },
+      { text:"'เป็นตัวของตัวเอง ไม่ต้องสนคนอื่น' 🖤", scores:{maki:2,haru:2,elims:2,vera:2,chloe:1,narcius:1,kai:1} },
+      { text:"'อยากเป็นคนที่ทำให้คนรอบข้างมีความสุข' 💛", scores:{lina:2,shiho:2,miho:2,yeono:2,bigbo:1,harang:1,lala:1,kuro:1} }
+    ]
+  }
+];
+
+// ===== STATE =====
+let currentQ = 0;
+let totalScores = {};
+function initScores(){ totalScores = {}; Object.keys(chars).forEach(k => totalScores[k]=0); }
+
+// ===== STARS =====
+function createStars(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<70;i++){
+    const s=document.createElement('div');s.className='star';
+    s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.setProperty('--dur',(2+Math.random()*3)+'s');
+    s.style.animationDelay=Math.random()*3+'s';
+    const sz=1+Math.random()*2;s.style.width=s.style.height=sz+'px';
+    c.appendChild(s);
+  }
+}
+
+function startQuiz(){
+  document.getElementById('startScreen').classList.remove('active');
+  document.getElementById('quizScreen').classList.add('active');
+  currentQ=0;initScores();showQuestion();
+}
+
+function showQuestion(){
+  const q=questions[currentQ];
+  document.getElementById('qNum').textContent=currentQ+1;
+  document.getElementById('progressFill').style.width=((currentQ+1)/20*100)+'%';
+  document.getElementById('catTag').textContent=q.tag;
+  document.getElementById('qEmoji').textContent=q.emoji;
+  document.getElementById('qText').textContent=q.text;
+  document.getElementById('choiceAText').textContent=q.choices[0].text;
+  document.getElementById('choiceBText').textContent=q.choices[1].text;
+  document.getElementById('choiceCText').textContent=q.choices[2].text;
+  document.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='slideIn .35s ease-out';
+}
+
+function selectChoice(idx){
+  const q=questions[currentQ];
+  Object.entries(q.choices[idx].scores).forEach(([k,v])=>{totalScores[k]=(totalScores[k]||0)+v;});
+  document.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.choice-btn')[idx].classList.add('selected');
+  setTimeout(()=>{currentQ++;currentQ<20?showQuestion():showResult();},350);
+}
+
+function showResult(){
+  document.getElementById('quizScreen').classList.remove('active');
+  document.getElementById('resultScreen').classList.add('active');
+
+  const sorted=Object.entries(totalScores).sort((a,b)=>b[1]-a[1]);
+  const topKey=sorted[0][0];
+  const topChar=chars[topKey];
+  const topScore=sorted[0][1];
+
+  // Result avatar
+  document.getElementById('resultCharImg').innerHTML = renderResultAvatar(topChar);
+  document.getElementById('resultName').textContent = topChar.name;
+  document.getElementById('resultMBTI').textContent = topChar.mbti;
+  document.getElementById('resultCat').textContent = topChar.cat;
+  document.getElementById('resultDesc').textContent = topChar.desc;
+
+  // Score bars top 5
+  const barColors=['var(--accent-gold)','var(--accent-pink)','var(--accent-blue)','var(--accent-purple)','var(--accent-green)'];
+  const barsEl=document.getElementById('scoreBars');
+  barsEl.innerHTML='<div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px;">📊 ความเข้ากัน</div>';
+  const maxScore=topScore||1;
+  sorted.slice(0,5).forEach(([key,score],i)=>{
+    const ch=chars[key];
+    const pct=Math.round(score/maxScore*100);
+    barsEl.innerHTML+=`
+      <div class="score-bar-item">
+        <div class="score-bar-header">
+          <span class="score-bar-name">${renderAvatar(ch,20)} ${ch.name}</span>
+          <span class="score-bar-pct">${pct}%</span>
+        </div>
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${barColors[i]||barColors[4]};"></div></div>
+      </div>`;
+  });
+
+  // Top 3
+  const top3El=document.getElementById('top3List');
+  top3El.innerHTML='';
+  sorted.slice(0,3).forEach(([key,score],i)=>{
+    const ch=chars[key];
+    top3El.innerHTML+=`
+      <div class="top3-item">
+        <span class="top3-rank r${i+1}">${i+1}</span>
+        <div class="top3-avatar">${renderAvatar(ch,36)}</div>
+        <div class="top3-info">
+          <div class="top3-name">${ch.name}</div>
+          <div class="top3-cat">${ch.cat} · ${ch.mbti}</div>
+        </div>
+      </div>`;
+  });
+
+  launchConfetti();
+}
+
+function launchConfetti(){
+  const c=document.getElementById('confetti');c.innerHTML='';
+  const colors=['#f06292','#4fc3f7','#ffd54f','#b388ff','#69f0ae','#ff8a65','#ff6f00'];
+  for(let i=0;i<50;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.setProperty('--fall-dur',(2+Math.random()*2)+'s');
+    p.style.animationDelay=Math.random()*1.5+'s';
+    const s=6+Math.random()*8;p.style.width=s+'px';p.style.height=s+'px';
+    p.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.innerHTML='',5000);
+}
+
+function resetQuiz(){
+  document.getElementById('resultScreen').classList.remove('active');
+  document.getElementById('startScreen').classList.add('active');
+  currentQ=0;initScores();
+}
+
+createStars();
+</script>
 </body>
 </html>
